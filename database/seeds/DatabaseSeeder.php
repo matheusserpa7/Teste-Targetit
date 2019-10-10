@@ -2,6 +2,7 @@
 
 use Illuminate\Database\Seeder;
 use App\Entities\User;
+use App\Entities\Sector;
 
 class DatabaseSeeder extends Seeder
 {
@@ -13,16 +14,19 @@ class DatabaseSeeder extends Seeder
     public function run()
     {
         // $this->call(UsersTableSeeder::class);
+        Sector::create([
+          'sector_name'      => 'Setor1'
+
+        ]);
 
         User::create([
           'name'      => 'Admin',
           'phone'     => '987654321',
           'email'     => 'admin',
           'password'  => bcrypt('admin'),
-          'setor_id'  => 1,
+          'sector_id'  => 1,
           'permission'=> 'app.admin'
-        ]
-        );
+        ]);
 
 
 

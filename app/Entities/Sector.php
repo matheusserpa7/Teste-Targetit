@@ -7,7 +7,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class User extends Authenticatable
+class Sector extends Authenticatable
 {
     use Notifiable;
     use SoftDeletes;
@@ -20,7 +20,7 @@ class User extends Authenticatable
      public $timestamps=true;
 
     protected $fillable = [
-        'name', 'phone', 'email','password','sector_id','permission'
+        'sector_name'
     ];
 
     /**
@@ -28,16 +28,12 @@ class User extends Authenticatable
      *
      * @var array
      */
-    protected $hidden = [
-        'password', 'remember_token'
-    ];
+    protected $hidden = [];
 
     /**
      * The attributes that should be cast to native types.
      *
      * @var array
      */
-    protected $casts = [
-        'email_verified_at' => 'datetime'
-    ];
+    protected $casts = [ ];
 }

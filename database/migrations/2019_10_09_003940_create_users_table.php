@@ -23,15 +23,15 @@ class CreateUsersTable extends Migration
 						$table->char('phone',20);
 						$table->char('email',45);
 						$table->string('password');
-						$table->integer('setor_id');
+						$table->integer('sector_id')->unsigned();
 
 						//permissão
 						$table -> string('permission') ->default('app.user');
 
-
             $table->timestamps();
-
 						$table->softDeletes();
+
+						$table->foreign('sector_id')->references('id')->on('sectors');
 		});
 	}
 
@@ -43,7 +43,7 @@ class CreateUsersTable extends Migration
 	public function down()
 	{
 		Schema::table('users', function(Blueprint $table) {
-
+			$table->dropForeign('users_sector_id_foreign');
 		});
 		Schema::drop('users');
 	}
