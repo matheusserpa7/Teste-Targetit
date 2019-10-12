@@ -11,6 +11,7 @@ use App\Http\Requests\RoomCreateRequest;
 use App\Http\Requests\RoomUpdateRequest;
 use App\Repositories\RoomRepository;
 use App\Validators\RoomValidator;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class RoomsController.
@@ -200,5 +201,12 @@ class RoomsController extends Controller
         }
 
         return redirect()->back()->with('message', 'Room deleted.');
+    }
+    public function admin(){
+
+      $rooms = DB::table('rooms')->get();
+      return view('user.admin_room',[
+       'rooms' => $rooms
+      ]);
     }
 }

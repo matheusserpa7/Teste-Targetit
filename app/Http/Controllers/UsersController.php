@@ -11,6 +11,8 @@ use App\Http\Requests\UserCreateRequest;
 use App\Http\Requests\UserUpdateRequest;
 use App\Repositories\UserRepository;
 use App\Validators\UserValidator;
+use App\Entities\Sector;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class UsersController.
@@ -46,19 +48,15 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function admin()
     {
-        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $users = $this->repository->all();
 
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $users,
-            ]);
-        }
-
-        return view('users.index', compact('users'));
+        $sectors = DB::table('sectors')->where('id','>',1)->pluck('sector_name','id');
+        $users= DB::table('users')->where('sector_id','>',1)->get();
+        return view('user.admin_user',[
+          'sectors' => $sectors,
+          'users' => $users
+        ]);
     }
 
     /**

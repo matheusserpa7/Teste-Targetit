@@ -21,6 +21,7 @@ class CreateRoomsTable extends Migration
 						$table->char('room_identification',15);
 
             $table->timestamps();
+						$table->softDeletes();
 		});
 	}
 
@@ -32,7 +33,7 @@ class CreateRoomsTable extends Migration
 	public function down()
 	{
 			Schema::table('rooms', function(Blueprint $table) {
-				
+
 			});
 		Schema::drop('rooms');
 	}

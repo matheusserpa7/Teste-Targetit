@@ -22,6 +22,7 @@ class DeashboardController extends Controller
   {
       $this->repository = $repository;
       $this->validator  = $validator;
+    //  $this->middleware('auth');
   }
 
   public function auth(Request $request){
@@ -31,7 +32,13 @@ class DeashboardController extends Controller
     ];
     try {
       if(Auth::attempt($data,null)){
-        return Redirect()->route('user.deashboard');
+        $setor=Auth::user()->sector_id;
+        if($setor==1)
+          return Redirect()->route('user.admin');
+
+        else
+          return 'Não e adm';
+        
       }
       else{
         echo "Acesso Negado";
@@ -47,6 +54,12 @@ class DeashboardController extends Controller
     //echo $data['email']." ".$data['password'];
   }
   public function index(){
-    echo"Logado :)";
+    //echo"Logado :)";
+    return view('user.deashboard');
+
   }
+  public function logout(Request $request) {
+  Auth::logout();
+  return redirect('/login');
+}
 }

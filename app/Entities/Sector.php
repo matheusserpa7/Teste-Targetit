@@ -36,4 +36,8 @@ class Sector extends Authenticatable
      * @var array
      */
     protected $casts = [ ];
+    public function get_sectors(){
+      $sectors = DB::table('sectors')->select('sector_name')->get();
+      return $sectors;
+    }
 }

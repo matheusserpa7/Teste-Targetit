@@ -31,7 +31,7 @@ section#conteudo-view{
   float:right;
   width: 500px;
   height: 100% ;
-  background:red;
+  background:linear-gradient(60deg, #ab47bc, #8e24aa);
 }
 
 section#conteudo-view h1{
@@ -65,19 +65,23 @@ section#conteudo-view form{
 }
 section#conteudo-view form label input,
 section#conteudo-view form input[type="submit"]{
+  color: #9D50B0;
   float: left;
   width: 100%;
   height: 40px;
   border-radius: 20px;
   padding: 0px 20px;
-  border: 2px solid #FA5858;
+  border: 2px solid white;
 }
 section#conteudo-view form input[type="submit"]{
   margin-top: 20px;
   width: 60%;
   float: right;
-  background: #DF0101;
+  background: #9932CC;
   text-align: center;
   font: 1em 'Anton', sans-serif;
   color: white;
 }
+/*
+ *Estilo Cadastro
+*/

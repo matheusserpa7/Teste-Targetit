@@ -11,6 +11,7 @@ use App\Http\Requests\SectorCreateRequest;
 use App\Http\Requests\SectorUpdateRequest;
 use App\Repositories\SectorRepository;
 use App\Validators\SectorValidator;
+use Illuminate\Support\Facades\DB;
 
 /**
  * Class SectorsController.
@@ -40,6 +41,8 @@ class SectorsController extends Controller
         $this->repository = $repository;
         $this->validator  = $validator;
     }
+
+
 
     /**
      * Display a listing of the resource.
@@ -200,5 +203,12 @@ class SectorsController extends Controller
         }
 
         return redirect()->back()->with('message', 'Sector deleted.');
+    }
+    public function admin(){
+
+      $sectors = DB::table('sectors')->where('id','>',1)->get();
+      return view('user.admin_sectors',[
+        'sectors' => $sectors
+      ]);
     }
 }

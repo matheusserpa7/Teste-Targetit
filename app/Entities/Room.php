@@ -2,15 +2,19 @@
 
 namespace App\Entities;
 
+
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\softDeletes;
-use Illuminate\Foundation\Auth\Room as Authenticatable;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+use Illuminate\Foundation\Auth\User as Authenticatable;
+
+
 
 class Room extends Authenticatable
 {
     use Notifiable;
-    use SofDeletes;
+    //use SofDeletes;
 
     /**
      * The attributes that are mass assignable.
