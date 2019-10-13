@@ -14,7 +14,8 @@
 
 
 // Rotas para Login
-  //Route::get('/',['as'=>'login','uses'=>'Controller@fazerLogin']);
+  Route::get('/',['as'=>'login','uses'=>'Controller@fazerLogin']);
+
   Route::get('/login',['as'=>'login','uses'=>'Controller@fazerLogin']);
   Route::post('/login',['as'=>'user.login','uses'=>'DeashboardController@auth']);
 
