@@ -13,7 +13,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
+<<<<<<< HEAD
       //  $this->call(UsersTableSeeder::class);
+=======
+        //$this->call(UsersTableSeeder::class);
+>>>>>>> fe6b334dea39230b44219bde4ee442d4a25b4e02
         Sector::create([
           'sector_name'      => 'Admin'
 
