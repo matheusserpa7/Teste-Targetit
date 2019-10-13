@@ -20,6 +20,7 @@ class CreateSchedulingsTable extends Migration
 
 						$table->integer('user_id')->unsigned();
 						$table->integer('room_id')->unsigned();
+						$table->DateTime('date');
 
             $table->timestamps();
 

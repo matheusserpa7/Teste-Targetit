@@ -37,8 +37,8 @@ class DeashboardController extends Controller
           return Redirect()->route('user.admin');
 
         else
-          return 'Não e adm';
-        
+          return Redirect()->route('user.agendamento');
+
       }
       else{
         echo "Acesso Negado";
@@ -53,6 +53,7 @@ class DeashboardController extends Controller
 
     //echo $data['email']." ".$data['password'];
   }
+
   public function index(){
     //echo"Logado :)";
     return view('user.deashboard');

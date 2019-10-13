@@ -8,18 +8,26 @@
   <div class="content">
     <div class="container-fluid">
       <div class="row">
+        @if($message)
+          <div class="alert alert-danger col-12">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <i class="material-icons">close</i>
+            </button>
+            <span>
+              <b> Alerta - </b> {{$message}}</span>
+          </div>
+
+        @endif
         <div class='col-md-12'>
           <div class='card'>
             <div class="card-header card-header-primary">
                 <h4 class="card-title">Cadastrar usuario</h4>
               </div>
             <div class='card-body'>
-              {!!Form::open(['method'=>'post'])!!}
+              {!!Form::open(['route'=>'sector.add','method'=>'post'])!!}
                 <div class="row">
-                  @include('templates.formularios.itext',['input'=>'Nume','atributes'=>['placeholder'=>'Nome de Usuario','class'=>'form-control']])
-                  @include('templates.formularios.itext',['input'=>'Telefone','atributes'=>['placeholder'=>'999999999','class'=>'form-control']])
-                  @include('templates.formularios.email',['input'=>'E-mail','atributes'=>['placeholder'=>'E-mail','class'=>'form-control']])
-                  @include('templates.formularios.password',['input'=>'Senha','atributes'=>['placeholder'=>'Senha','class'=>'form-control']])
+                  @include('templates.formularios.itext',['col'=>'8','input'=>'sector_name','atributes'=>['placeholder'=>'Nome do setor','class'=>'form-control']])
+
 
                   @include('templates.formularios.button')
 
@@ -62,12 +70,7 @@
                       {{ $sector->sector_name }}
                     </td>
                     <td class="td-actions">
-                      <button type="button" rel="tooltip" title="Edit Task" class="btn btn-primary btn-link btn-sm">
-                        <i class="material-icons">edit</i>
-                      </button>
-                      <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-link btn-sm">
-                        <i class="material-icons">close</i>
-                      </button>
+                      
                     </td>
                   </tr>
                   @endforeach

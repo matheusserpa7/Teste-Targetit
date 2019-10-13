@@ -38,7 +38,7 @@
 
   <body class="">
     <div class="wrapper ">
-      
+
         @yield('conteudo-view')
         <!-- End Navbar -->
 

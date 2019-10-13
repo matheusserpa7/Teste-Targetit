@@ -49,17 +49,30 @@ class RoomsController extends Controller
      */
     public function index()
     {
-        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $rooms = $this->repository->all();
 
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $rooms,
+            $rooms = DB::table('rooms')->get();
+            return view('user.admin_room',[
+             'rooms' => $rooms,
+             'message'=>null
             ]);
+    }
+    public function add(RoomCreateRequest $request){
+      $campos=$request->all();
+      foreach ($campos as $campo) {
+          if(!$campo){
+            $sectors = DB::table('sectors')->where('id','>',1)->get();
+            return view('user.admin_sectors',[
+              'sectors' => $sectors,
+              'message' => "preencha todos os campos"
+            ]);
+          }
+
         }
 
-        return view('rooms.index', compact('rooms'));
+      $result=$this->store($request);
+    
+       return Redirect()->route('room.admin');
+
     }
 
     /**
@@ -202,11 +215,5 @@ class RoomsController extends Controller
 
         return redirect()->back()->with('message', 'Room deleted.');
     }
-    public function admin(){
 
-      $rooms = DB::table('rooms')->get();
-      return view('user.admin_room',[
-       'rooms' => $rooms
-      ]);
-    }
 }

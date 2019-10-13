@@ -49,20 +49,14 @@ class SectorsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
-    {
-        $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
-        $sectors = $this->repository->all();
+     public function index(){
 
-        if (request()->wantsJson()) {
-
-            return response()->json([
-                'data' => $sectors,
-            ]);
-        }
-
-        return view('sectors.index', compact('sectors'));
-    }
+       $sectors = DB::table('sectors')->where('id','>',1)->get();
+       return view('user.admin_sectors',[
+         'sectors' => $sectors,
+         'message' => null
+       ]);
+     }
 
     /**
      * Store a newly created resource in storage.
@@ -73,6 +67,24 @@ class SectorsController extends Controller
      *
      * @throws \Prettus\Validator\Exceptions\ValidatorException
      */
+     public function add(SectorCreateRequest $request){
+       $campos=$request->all();
+       $sectors = DB::table('sectors')->where('id','>',1)->get();
+       foreach ($campos as $campo) {
+           if(!$campo){
+             return view('user.admin_sectors',[
+               'sectors' => $sectors,
+               'message' => "preencha todos os campos"
+             ]);
+           }
+
+         }
+
+       $result=$this->store($request);
+       if(!$result)
+        return Redirect()->route('sector.admin');
+
+     }
     public function store(SectorCreateRequest $request)
     {
         try {
@@ -86,12 +98,9 @@ class SectorsController extends Controller
                 'data'    => $sector->toArray(),
             ];
 
-            if ($request->wantsJson()) {
 
-                return response()->json($response);
-            }
 
-            return redirect()->back()->with('message', $response['message']);
+
         } catch (ValidatorException $e) {
             if ($request->wantsJson()) {
                 return response()->json([
@@ -204,11 +213,5 @@ class SectorsController extends Controller
 
         return redirect()->back()->with('message', 'Sector deleted.');
     }
-    public function admin(){
 
-      $sectors = DB::table('sectors')->where('id','>',1)->get();
-      return view('user.admin_sectors',[
-        'sectors' => $sectors
-      ]);
-    }
 }

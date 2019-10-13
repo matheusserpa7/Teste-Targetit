@@ -13,6 +13,7 @@ use App\Repositories\UserRepository;
 use App\Validators\UserValidator;
 use App\Entities\Sector;
 use Illuminate\Support\Facades\DB;
+use \Auth;
 
 /**
  * Class UsersController.
@@ -48,14 +49,32 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function admin()
+    public function index_usuario(){
+      $rooms = DB::table('rooms')->pluck('room_identification','id');
+      $users= DB::table('users')->where('sector_id','>',1)->pluck('name','id');
+      $schedulings= DB::table('schedulings')->get();
+      return view('user.scheduling',[
+        'rooms' => $rooms,
+        'users' => $users,
+        'schedulings' => $schedulings,
+        'message' => null
+      ]);
+    }
+    public function passowrd_usuario(){
+      return view('user.password',[
+        'message' => null
+      ]);
+    }
+
+    public function index()
     {
 
         $sectors = DB::table('sectors')->where('id','>',1)->pluck('sector_name','id');
         $users= DB::table('users')->where('sector_id','>',1)->get();
         return view('user.admin_user',[
           'sectors' => $sectors,
-          'users' => $users
+          'users' => $users,
+          'message' => null
         ]);
     }
 
@@ -68,13 +87,51 @@ class UsersController extends Controller
      *
      * @throws \Prettus\Validator\Exceptions\ValidatorException
      */
-    public function store(UserCreateRequest $request)
+       public function add(Request $request){
+
+         $campos=$request->all();
+         foreach ($campos as $campo) {
+             if(!$campo){
+               $sectors = DB::table('sectors')->where('id','>',1)->pluck('sector_name','id');
+               $users= DB::table('users')->where('sector_id','>',1)->get();
+               return view('user.admin_user',[
+                 'sectors' => $sectors,
+                 'users' => $users,
+                 'message' => "preencha todos os campos"
+               ]);
+             }
+
+           }
+
+
+           $result=$this->store($request);
+
+
+            return Redirect()->route('user.admin');
+
+
+
+       }
+    public function store(Request $request)
     {
+
         try {
 
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
+          $password=bcrypt($request->get('password'));
 
-            $user = $this->repository->create($request->all());
+          $data=["_token"=>$request->get('_token'),
+          "name"=>$request->get('name'),
+          "phone"=>$request->get('phone'),
+          "email"=>$request->get('email'),
+          "password"=>$password,
+          "sector_id"=>$request->get('sector_id')];
+
+
+            $this->validator->with($data)->passesOrFail(ValidatorInterface::RULE_CREATE);
+
+            $user = $this->repository->create($data);
+
+
 
             $response = [
                 'message' => 'User created.',
@@ -88,6 +145,7 @@ class UsersController extends Controller
 
             return redirect()->back()->with('message', $response['message']);
         } catch (ValidatorException $e) {
+
             if ($request->wantsJson()) {
                 return response()->json([
                     'error'   => true,
@@ -144,13 +202,25 @@ class UsersController extends Controller
      *
      * @throws \Prettus\Validator\Exceptions\ValidatorException
      */
-    public function update(UserUpdateRequest $request, $id)
+     public function passowrd_update(Request $request){
+       $result=$this->update($request, Auth::user()->id);
+       //dd($request->all());
+       return view('user.password',[
+         'message' => "Alterado com secesso"
+       ]);
+
+
+     }
+    public function update(Request $request, $id)
     {
         try {
+            $data=[
+              '_token'=>$request->get('_token'),
+              'passord'=>bcrypt($request->get('passord'))
+            ];
+            $this->validator->with($data)->passesOrFail(ValidatorInterface::RULE_UPDATE);
 
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_UPDATE);
-
-            $user = $this->repository->update($request->all(), $id);
+            $user = $this->repository->update($data, $id);
 
             $response = [
                 'message' => 'User updated.',
@@ -185,6 +255,11 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+     public function deleta(Request $request){
+       $this->destroy($request->get('id'));
+       return Redirect()->route('user.admin');
+
+     }
     public function destroy($id)
     {
         $deleted = $this->repository->delete($id);

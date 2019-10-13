@@ -8,15 +8,25 @@
   <div class="content">
     <div class="container-fluid">
       <div class="row">
+        @if($message)
+          <div class="alert alert-danger col-12">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+              <i class="material-icons">close</i>
+            </button>
+            <span>
+              <b> Alerta - </b> {{$message}}</span>
+          </div>
+
+        @endif
         <div class='col-md-12'>
           <div class='card'>
             <div class="card-header card-header-primary">
                 <h4 class="card-title">Cadastrar usuario</h4>
               </div>
             <div class='card-body'>
-              {!!Form::open(['method'=>'post'])!!}
+              {!!Form::open(['route'=>'room.add','method'=>'post'])!!}
                 <div class="row">
-                  @include('templates.formularios.itext',['input'=>'Nume','atributes'=>['placeholder'=>'Nome de Usuario','class'=>'form-control']])
+                  @include('templates.formularios.itext',['col'=>'8','input'=>'room_identification','atributes'=>['placeholder'=>'Identificação da sala','class'=>'form-control']])
 
 
                   @include('templates.formularios.button')
@@ -44,7 +54,7 @@
                     ID
                   </th>
                   <th>
-                    Nome da Sala
+                    Indentificação da sala
                   </th>
 
                   <th></th>
@@ -60,12 +70,7 @@
                       {{ $room->room_identification }}
                     </td>
                     <td class="td-actions">
-                      <button type="button" rel="tooltip" title="Edit Task" class="btn btn-primary btn-link btn-sm">
-                        <i class="material-icons">edit</i>
-                      </button>
-                      <button type="button" rel="tooltip" title="Remove" class="btn btn-danger btn-link btn-sm">
-                        <i class="material-icons">close</i>
-                      </button>
+                      
                     </td>
                   </tr>
                   @endforeach

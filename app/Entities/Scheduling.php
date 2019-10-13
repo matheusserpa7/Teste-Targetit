@@ -5,12 +5,12 @@ namespace App\Entities;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\softDeletes;
-use Illuminate\Foundation\Auth\Scheduling as Authenticatable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
-class Room extends Authenticatable
+class Scheduling extends Authenticatable
 {
     use Notifiable;
-    use SofDeletes;
+    use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -20,7 +20,7 @@ class Room extends Authenticatable
      public $timestamps=true;
 
     protected $fillable = [
-        'user_id','room_id'
+        'user_id','room_id','date'
     ];
 
     /**

@@ -7,27 +7,22 @@
 -->
   <div class="logo">
     <a  class="simple-text logo-normal">
-      Painel Admin
+      Painel de Usuário
+
     </a>
   </div>
   <div class="sidebar-wrapper">
     <ul class="nav">
-      <li class="nav-item <?php echo$op1?>">
-        <a class="nav-link" href="usuario">
-          <i class="material-icons">person</i>
-          <p>Cadastrar Usuarios</p>
-        </a>
-      </li>
-      <li class="nav-item <?php echo$op2?>">
-        <a class="nav-link" href="setor">
-          <i class="material-icons">dashboard</i>
-          <p>Cadastrar Setores</p>
-        </a>
-      </li>
-      <li class="nav-item <?php echo$op3?>">
-        <a class="nav-link" href="salas">
+      <li class="nav-item {{$op1}}">
+        <a class="nav-link" href="/usuario/agendamento">
           <i class="material-icons">content_paste</i>
-          <p>Cadastrar Salas</p>
+          <p>Agendar Reuniões</p>
+        </a>
+      </li>
+      <li class="nav-item {{$op2}}">
+        <a class="nav-link" href="/usuario/password">
+          <i class="material-icons">dashboard</i>
+          <p>Alterar Senha</p>
         </a>
       </li>
       <li class="nav-item ">
@@ -36,6 +31,7 @@
           <p>Sair</p>
         </a>
       </li>
+
 
     </ul>
   </div>

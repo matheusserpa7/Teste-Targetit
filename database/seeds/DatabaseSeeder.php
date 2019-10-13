@@ -13,7 +13,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(UsersTableSeeder::class);
+      //  $this->call(UsersTableSeeder::class);
         Sector::create([
           'sector_name'      => 'Admin'
 
@@ -22,10 +22,9 @@ class DatabaseSeeder extends Seeder
         User::create([
           'name'      => 'admin',
           'phone'     => '987654321',
-          'email'     => 'Adin',
+          'email'     => 'Admin',
           'password'  => bcrypt('admin'),
-          'sector_id'  => 1,
-          'permission'=> 'app.admin'
+          'sector_id'  => 1
         ]);
 
 

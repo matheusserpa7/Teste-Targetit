@@ -25,8 +25,7 @@ class CreateUsersTable extends Migration
 						$table->string('password');
 						$table->integer('sector_id')->unsigned();
 
-						//permissão
-						$table -> string('permission') ->default('app.user');
+
 
             $table->timestamps();
 						$table->softDeletes();

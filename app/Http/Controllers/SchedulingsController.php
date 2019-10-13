@@ -11,6 +11,8 @@ use App\Http\Requests\SchedulingCreateRequest;
 use App\Http\Requests\SchedulingUpdateRequest;
 use App\Repositories\SchedulingRepository;
 use App\Validators\SchedulingValidator;
+use Illuminate\Support\Facades\DB;
+use \Auth;
 
 /**
  * Class SchedulingsController.
@@ -46,6 +48,65 @@ class SchedulingsController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+     public function add(SchedulingCreateRequest $request){
+
+        $campos=$request->all();
+        foreach ($campos as $campo) {
+            if(!$campo){
+              $rooms = DB::table('rooms')->pluck('room_identification','id');
+              $users= DB::table('users')->where('sector_id','>',1)->pluck('name','id');
+              $schedulings= DB::table('schedulings')->get();
+              return view('user.scheduling',[
+                'rooms' => $rooms,
+                'users' => $users,
+                'schedulings' => $schedulings,
+                'message' => 'Preencha todos os campos'
+              ]);
+            }
+          }
+          $Hour =  date("H:i", strtotime($request->get('time')));
+          $time=$request->get('date')." ".$Hour;
+
+            $schedulings= DB::table('schedulings')->get();
+
+            foreach ($schedulings as $scheduling) {
+             if((strtotime( $time) >= strtotime($scheduling->date." -1 hours" ) && strtotime( $time) <= strtotime($scheduling->date ))||(strtotime( $time) <= strtotime($scheduling->date." +1 hours" )&&strtotime( $time)>strtotime($scheduling->date)) ){
+
+               if($request->get('room_id')==$scheduling->room_id){
+                 //dd($scheduling->room_id);
+
+
+               $rooms = DB::table('rooms')->pluck('room_identification','id');
+               $users= DB::table('users')->where('sector_id','>',1)->pluck('name','id');
+
+               return view('user.scheduling',[
+                 'rooms' => $rooms,
+                 'users' => $users,
+                 'schedulings' => $schedulings,
+                 'message' => 'Horário indisponivel , verifique'
+               ]);
+             }
+           }
+             if(strtotime($scheduling->created_at." +1 day") > strtotime(date('Y-m-d'))&&$scheduling->user_id==Auth::user()->id){
+
+               $rooms = DB::table('rooms')->pluck('room_identification','id');
+               $users= DB::table('users')->where('sector_id','>',1)->pluck('name','id');
+               return view('user.scheduling',[
+                 'rooms' => $rooms,
+                 'users' => $users,
+                 'schedulings' => $schedulings,
+                 'message' => 'Limite de Reservas 1 por dia'
+               ]);
+             }
+            }
+
+
+           $this->store($request);
+
+         return Redirect()->route('user.agendamento');
+
+
+      }
     public function index()
     {
         $this->repository->pushCriteria(app('Prettus\Repository\Criteria\RequestCriteria'));
@@ -70,13 +131,25 @@ class SchedulingsController extends Controller
      *
      * @throws \Prettus\Validator\Exceptions\ValidatorException
      */
+
     public function store(SchedulingCreateRequest $request)
     {
+      $Hour =  date("H:i", strtotime($request->get('time')));
+      $time=$request->get('date')." ".$Hour;
+
+
         try {
 
-            $this->validator->with($request->all())->passesOrFail(ValidatorInterface::RULE_CREATE);
+           $data=[
+             '_token'=>$request->get('_token'),
+             'user_id' => Auth::user()->id,
+             'room_id' => $request->get('room_id'),
+             'date' => $time
+           ];
 
-            $scheduling = $this->repository->create($request->all());
+            $this->validator->with($data)->passesOrFail(ValidatorInterface::RULE_CREATE);
+
+            $scheduling = $this->repository->create($data);
 
             $response = [
                 'message' => 'Scheduling created.',
@@ -146,6 +219,7 @@ class SchedulingsController extends Controller
      *
      * @throws \Prettus\Validator\Exceptions\ValidatorException
      */
+
     public function update(SchedulingUpdateRequest $request, $id)
     {
         try {
